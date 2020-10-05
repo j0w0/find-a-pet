@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Favorites · Find-a-Pet{% endblock %}
+{% block page_id %}page-favorites{% endblock %}
+
+{% block content %}
+
+<div id="page-header">
+    <div class="container py-5">
+        <h1 class="display-4 mb-4">My Favorites</h1>
+    </div>
+</div>
+
+<hr class="mt-0 mb-4" />
+
+<div class="container py-4">
+    {% if pet in users_pets %}
+
+    <div class="row">
+        {% for pet in users_pets %}
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="card mb-4">
+                <img src="{% if pet.animal.photos.0.medium %} {{pet.animal.photos.0.medium}} {% else %} {{ default_img }} {% endif %}"
+                    class="card-img-top" alt="" />
+                <div class="card-body">
+                    <h5 class="card-title">{{ pet.animal.name }}</h5>
+                    <p class="card-text">
+                    <form action="{% url 'pets_delete' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="api_pet_id" value="{{ pet.animal.id }}" />
+                        <button type="submit" class="btn btn-secondary">Remove</button>
+                        <a href="{% url 'pets_show' pet.animal.id %}" class="btn btn-primary">See Details</a>
+                    </form>
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+
+    <p>You haven't favorited any pets yet. Try a <a href="{% url 'search' %}">search</a> to get started.</p>
+
+    {% endif %}
+</div>
+
+{% endblock %}

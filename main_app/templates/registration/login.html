@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Login · Find-a-Pet{% endblock %}
+{% block page_id %}page-login{% endblock %}
+
+{% block content %}
+
+<div id="page-header">
+    <div class="container py-5">
+        <h1 class="display-4 mb-4">Login</h1>
+    </div>
+</div>
+
+<hr class="mt-0 mb-4" />
+
+<div class="container py-4">
+    {% if error_message %}
+    <p>{{ error_message }}</p>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Log In" />
+        <input type="hidden" name="next" value="{{ next }}" />
+    </form>
+</div>
+
+{% endblock %}

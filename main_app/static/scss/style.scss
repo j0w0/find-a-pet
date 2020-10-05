@@ -1,0 +1,33 @@
+@import "./bootstrap-theme.scss";
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    background: gray("200");
+    flex: 1;
+}
+
+footer {
+    background: gray("400");
+}
+
+.card-img-top {
+    padding-top: 85%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+#page-header {
+    position: relative;
+    background-position: center;
+    background-color: theme-color('secondary');
+    background-image: url('https://www.transparenttextures.com/patterns/grilled-noise.png');
+    //background-image: url('https://www.transparenttextures.com/patterns/maze-black.png');
+    // background-image: url('https://www.transparenttextures.com/patterns/subtle-zebra-3d.png');
+    // background-image: url('https://www.transparenttextures.com/patterns/zig-zag.png');
+}

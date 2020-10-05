@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div id="page-header">
+    <div class="container py-5 text-center">
+        <h1 class="display-4 mb-4">Find Your New Best Friend</h1>
+
+        <form action="{% url 'search' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-sm-6 col-md-5 col-lg-4 offset-lg-1">
+                    <div class="form-group">
+                        <!-- <label for="zip_code">Zip Code</label> -->
+                        <input id="zip_code" type="text" class="form-control form-control-lg" name="zip_code"
+                            placeholder="Zip Code" />
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-5 col-lg-4">
+                    <div class="form-group">
+                        <!-- <label for="pet_type">Animal Type</label> -->
+                        <select id="pet_type" name="pet_type" class="custom-select custom-select-lg">
+                            <option selected value="">All Animals</option>
+                            {% for type in animal_types.types %}
+                            <option value="{{ type.name }}">{{ type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col col-md-2">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<hr class="mt-0 mb-4" />
+
+<div class="container py-4">
+
+    <h3 class="text-center mb-5">Latest Adoptable Pets</h3>
+
+    <div class="row">
+        {% for pet in featured_pets %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="card mb-4">
+                <a href="{% url 'pets_show' pet.id %}">
+                    <div class="card-img-top border-bottom"
+                        style="background-image:url('{% if pet.photos.0.medium %} {{pet.photos.0.medium}} {% else %} {{ default_img }} {% endif %}');">
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">{{pet.name}}</h5>
+                    <p class="card-text">{{pet.description}}</p>
+                    <a href="{% url 'pets_show' pet.id %}">View More &raquo;</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+{% endblock %}

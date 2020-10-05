@@ -1,0 +1,85 @@
+{% load static %}
+{% load compress %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>{% block title %}Find-a-Pet{% endblock %}</title>
+    <script defer src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script defer src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'scss/style.scss' %}" />
+    {% endcompress %}
+</head>
+
+<body id="{% block page_id %}page-home{% endblock %}">
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+
+            <a class="navbar-brand" href="{% url 'index' %}">
+                🐶 &nbsp;Find-a-Pet
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-menu"
+                aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar-menu">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'search' %}">Search</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'favorites' %}">My Favorites</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}" id="login-nav-link">Log In</a>
+                    </li>
+                    {% endif %}
+                    </li>
+                </ul>
+            </div>
+
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="px-3 py-2">
+            <div class="row">
+                <div class="col-6">
+                    Josh Woodcock 2020
+                </div>
+                <div class="col-6 text-right">
+                    <a href="https://www.linkedin.com/in/jrwoodcock" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/j0w00" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="http://www.j0w0.com" target="_blank"><i class="fas fa-globe-americas"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

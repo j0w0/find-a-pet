@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block title %}Pet Details · Find-a-Pet{% endblock %}
+{% block page_id %}page-details{% endblock %}
+
+{% block content %}
+
+<div id="page-header">
+    <div class="container py-5">
+        <h1 class="display-4 mb-4">{{animal.animal.name}}</h1>
+
+        <h6 class="mb-4">
+            {{animal.animal.size}} {{animal.animal.age}} {{animal.animal.gender}} / {{animal.animal.breeds.primary}}
+        </h6>
+
+        {% if user.is_authenticated %} {% if pet %}
+        <form action="{% url 'pets_delete' %}" method="POST" class="ml-md-auto">
+            {% csrf_token %}
+            <input type="hidden" name="api_pet_id" value="{{ animal.animal.id }}" />
+            <button type="submit" class="btn btn-secondary">Remove from Favorites</button>
+        </form>
+        {% else %}
+        <form action="{% url 'pets_create' %}" method="POST" class="ml-md-auto">
+            {% csrf_token %}
+            <input type="hidden" name="api_pet_id" value="{{ animal.animal.id }}" />
+            <button type="submit" class="btn btn-primary">Add to Favorites</button>
+        </form>
+        {% endif %} {% endif %}
+    </div>
+</div>
+
+<hr class="mt-0 mb-4" />
+
+<div class="container py-4">
+
+    <div class="row">
+        <div class="col-md-6 col-xl-4">
+            <img src="{% if animal.animal.photos.0.medium %}{{animal.animal.photos.0.medium}}{% else %}{{ default_img }}{% endif %}"
+                alt="{{animal.animal.type}} available for adoption - {{animal.animal.contact.phone}}"
+                class="img-fluid w-100 mb-3 mb-md-0 bg-light" />
+        </div>
+
+        <div class="col-md-6 col-xl-8">
+            <p>
+                {% if animal.animal.description %}
+                {{animal.animal.description}}
+                {% else %}
+                Interested in adopting this pet and want more info?
+                {% endif %}
+                <a href="{{animal.animal.url}}" target="_blank">Read more&nbsp;&raquo;</a>
+            </p>
+
+            <h6>Contact</h6>
+            <ul class="list-unstyled">
+                <li>{{animal.animal.contact.email}}</li>
+
+                {% if animal.animal.contact.phone %}
+                <li>{{animal.animal.contact.phone}}</li>
+                {% endif %}
+                <li>
+                    <address>
+                        {{animal.animal.contact.address.city}},
+                        {{animal.animal.contact.address.state}}
+                        {{animal.animal.contact.address.postcode}}
+                    </address>
+                </li>
+            </ul>
+
+            {%if user.is_authenticated and pet %}
+            <form action="{% url 'pets_update' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="comment">Comments/Notes</label>
+                    <textarea id="comment" name="comment" class="form-control">{{ pet.comments }}</textarea>
+                </div>
+
+                <input type="hidden" name="api_pet_id" value="{{ animal.animal.id }}" />
+                <button type="submit" class="btn btn-primary">Save Comment</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+
+
+</div>
+
+{% endblock %}

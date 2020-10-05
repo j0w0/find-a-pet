@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% block title %}Search · Find-a-Pet{% endblock %}
+{% block page_id %}page-search{% endblock %}
+
+{% block content %}
+
+<div id="page-header">
+    <div class="container py-5">
+        <h1 class="display-4 mb-4">Search</h1>
+
+        <form action="{% url 'search' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <!-- <label for="zip_code">Zip Code</label> -->
+                        <input id="zip_code" type="text" class="form-control form-control-lg" name="zip_code"
+                            value="{{ request.GET.location }}" placeholder="Zip Code" />
+                    </div>
+                </div>
+
+                <div class="col-md-5">
+                    <div class="form-group">
+                        <!-- <label for="pet-type">Animal Type</label> -->
+                        <select name="pet_type" class="custom-select custom-select-lg">
+                            <option selected value="">All Animals</option>
+                            {% for type in animal_types.types %}
+                            <option value="{{ type.name }}" {% if request.GET.type == type.name %} selected {% endif %}>
+                                {{ type.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary btn-block btn-lg mb-3">Search</button>
+                </div>
+
+                <div class="col-12">
+                    <button type="button" class="btn btn-link dropdown-toggle btn-sm px-0 mb-3" data-toggle="collapse"
+                        data-target="#adv-search">Advanced</button>
+                </div>
+
+                <div id="adv-search" class="col collapse">
+                    <div class="form-group">
+                        <label><strong>Size</strong></label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="size" id="size-small" value="small"
+                                {% if request.GET.size == 'small' %} checked {% endif %}>
+                            <label class="form-check-label" for="size-small">Small</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="size" id="size-medium" value="medium"
+                                {% if request.GET.size == 'medium' %} checked {% endif %}>
+                            <label class="form-check-label" for="size-medium">Medium</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="size" id="size-large" value="large"
+                                {% if request.GET.size == 'large' %} checked {% endif %}>
+                            <label class="form-check-label" for="size-large">Large</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="size" id="size-xlarge" value="xlarge"
+                                {% if request.GET.size == 'xlarge' %} checked {% endif %}>
+                            <label class="form-check-label" for="size-xlarge">Extra Large</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>Gender</strong></label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="gender-male" value="male"
+                                {% if request.GET.gender == 'male' %} checked {% endif %}>
+                            <label class="form-check-label" for="gender-male">Male</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="gender-female" value="female"
+                                {% if request.GET.gender == 'female' %} checked {% endif %}>
+                            <label class="form-check-label" for="gender-female">Female</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="gender" id="gender-unknown"
+                                value="unknown" {% if request.GET.gender == 'unknown' %} checked {% endif %}>
+                            <label class="form-check-label" for="gender-unknown">Unknown</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><strong>Age</strong></label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="age" id="age-baby" value="baby"
+                                {% if request.GET.age == 'baby' %} checked {% endif %}>
+                            <label class="form-check-label" for="age-baby">Baby</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="age" id="age-young" value="young"
+                                {% if request.GET.age == 'young' %} checked {% endif %}>
+                            <label class="form-check-label" for="age-young">Young</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="age" id="age-adult" value="adult"
+                                {% if request.GET.age == 'adult' %} checked {% endif %}>
+                            <label class="form-check-label" for="age-adult">Adult</label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="age" id="age-senior" value="senior"
+                                {% if request.GET.age == 'senior' %} checked {% endif %}>
+                            <label class="form-check-label" for="age-senior">Senior</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<hr class="mt-0 mb-4" />
+
+<div class="container py-4">
+
+    {% if search_results %}
+
+    <p>Page {{ search_results.pagination.current_page }} of {{ search_results.pagination.total_count }} Results</p>
+
+    <div class="row">
+        {% for pet in search_results %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="card mb-4">
+                <a href="{% url 'pets_show' pet.id %}">
+                    <div class="card-img-top border-bottom"
+                        style="background-image:url('{% if pet.photos.0.medium %} {{pet.photos.0.medium}} {% else %} {{ default_img }} {% endif %}');">
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">{{pet.name}}</h5>
+                    <p class="card-text">{{pet.description}}</p>
+                    <a href="{% url 'pets_show' pet.id %}">View More &raquo;</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <p class="text-right">
+        {% if prev_page %}
+        <a href="{{ prev_page }}">&laquo;Previous</a>
+        {% endif %}
+        {% if next_page %}
+        <a href="{{ next_page }}">Next&raquo;</a>
+        {% endif %}
+    </p>
+
+    {% else %}
+
+    <h3 class="text-center mb-5">Latest Adoptable Pets</h3>
+
+    <div class="row">
+        {% for pet in featured_pets %}
+        <div class="col-sm-6 col-lg-4">
+            <div class="card mb-4">
+                <a href="{% url 'pets_show' pet.id %}">
+                    <div class="card-img-top border-bottom"
+                        style="background-image:url('{% if pet.photos.0.medium %} {{pet.photos.0.medium}} {% else %} {{ default_img }} {% endif %}');">
+                    </div>
+                </a>
+                <div class="card-body">
+                    <h5 class="card-title">{{pet.name}}</h5>
+                    <p class="card-text">{{pet.description}}</p>
+                    <a href="{% url 'pets_show' pet.id %}">View More &raquo;</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
