@@ -11,7 +11,7 @@ Find-A-Pet is an app that connects users to local pets, allowing people to save 
 
 ## Screenshots
 
-<!-- <img src="https://i.imgur.com/eRFomoK.png" width="100%" /> -->
+<img src="https://i.imgur.com/YuG81mq.png" width="100%" />
 
 ## Technologies Used
 
@@ -27,7 +27,7 @@ Find-A-Pet is an app that connects users to local pets, allowing people to save 
 
 ## Getting Started
 
-- [View the Demo](/) (Sign up to see full CRUD functionality)
+- [View the Demo](https://j0w0-find-a-pet.herokuapp.com/) (Sign up to see full CRUD functionality)
 
 ## Next Steps
 
