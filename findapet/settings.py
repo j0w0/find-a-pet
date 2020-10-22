@@ -142,7 +142,7 @@ COMPRESS_PRECOMPILERS = (
 )
 
 STATICFILES_DIR = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'main_app/static'),
 )
 
 LOGIN_REDIRECT_URL = '/'
